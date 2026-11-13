@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+
 
 const Banner = () => {
   return (
@@ -25,14 +25,14 @@ const Banner = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-2">
             <Link 
               className="px-6 py-3.5 text-base font-semibold text-white bg-green-600 hover:bg-green-700 rounded-xl shadow-lg hover:shadow-green-600/25 transition-all text-center" 
-              href={"/explore-events"}
+              href={"/events"}
             >
               Explore Events
             </Link>
             
             <Link 
               className="px-6 py-3.5 text-base font-semibold text-gray-800 bg-white border border-gray-200 hover:border-green-600 hover:text-green-600 rounded-xl shadow-sm transition-all text-center" 
-              href={"/create-event"}
+              href={"/create-events"}
             >
               Create Event
             </Link>

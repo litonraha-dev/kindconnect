@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8 font-medium text-gray-600">
           <Link
             className="hover:text-green-600 transition-colors"
-            href={"/home"}
+            href={"/"}
           >
             Home
           </Link>

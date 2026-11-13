@@ -1,67 +1,181 @@
-import Link from 'next/link';
-import React from 'react';
-interface EventCardProps {
-  event: {
-    _id: string;
-    title: string;
-    category: string;
-    location: string;
-    participants: number;
-  };
+
+import Link from "next/link";
+import {
+  MapPin,
+  Users,
+  ArrowRight,
+  CalendarDays,
+  Tag,
+} from "lucide-react";
+import Image from "next/image";
+
+interface Event {
+  _id: string;
+  title: string;
+  category: string;
+  location: string;
+  participants: number;
+  date?: string;
+  image?: string;
 }
 
-const EventsCard = ({event}:EventCardProps) => {
+interface EventsCardProps {
+  events: Event[];
+}
+
+const EventsCard = ({ events }: EventsCardProps) => {
+  console.log(events, "from events card")
+  if (!events || events.length === 0) {
     return (
-        <div>
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between gap-4">
-      
-      {/* টপ সেকশন: ক্যাটাগরি ব্যাজ */}
-      <div className="flex items-center justify-between">
-        <span className="px-3 py-1 bg-green-50 text-green-700 font-semibold text-xs rounded-full uppercase tracking-wider">
-          {event.category}
-        </span>
-        <span className="text-xs font-medium text-gray-400">
-          ID: {event._id}
-        </span>
-      </div>
+      <section className="px-6 py-20 text-center">
+        <div className="mx-auto max-w-md">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-50 text-green-600">
+            <CalendarDays size={30} />
+          </div>
 
-      {/* মেইন ডিটেইলস */}
-      <div className="space-y-2">
-        <h3 className="text-xl font-bold text-gray-900 tracking-tight">
-          {event.title}
-        </h3>
-        
-        <div className="flex items-center gap-2 text-gray-500 text-sm">
-          {/* লোকেশন আইকন */}
-          <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span>{event.location}</span>
+          <h2 className="mt-5 text-2xl font-bold text-gray-900">
+            No Events Found
+          </h2>
+
+          <p className="mt-2 text-gray-500">
+            There are no events available right now.
+            Check back later for upcoming events.
+          </p>
         </div>
-
-        <div className="flex items-center gap-2 text-gray-500 text-sm">
-          {/* পার্টিসিপেন্টস আইকন */}
-          <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-          <span>{event.participants} Participants Joined</span>
-        </div>
-      </div>
-
-      {/* অ্যাকশন বাটন */}
-      <div className="pt-2">
-        <Link
-          href={`/events/${event._id}`}
-          className="block w-full text-center py-2.5 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all text-sm shadow-sm"
-        >
-          View Details
-        </Link>
-      </div>
-
-    </div>
-        </div>
+      </section>
     );
+  }
+
+  return (
+    <section className="w-full bg-gray-50 px-6 py-12">
+      <div className="mx-auto max-w-7xl">
+
+        {/* Section Heading */}
+        <div className="mb-10">
+          <span className="text-sm font-bold uppercase tracking-wider text-green-600">
+            KindConnect Community
+          </span>
+
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Explore Events
+          </h2>
+
+          <p className="mt-3 max-w-2xl text-gray-500">
+            Discover meaningful events, connect with people,
+            and make a positive impact in your community.
+          </p>
+        </div>
+
+        {/* Events Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {events.map((event) => (
+            <article
+              key={event._id}
+              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              {/* Event Image */}
+              <div className="relative h-52 overflow-hidden bg-green-50">
+                {event.image ? (
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    height={100}
+                    width={100}
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <CalendarDays
+                      size={55}
+                      className="text-green-300"
+                    />
+                  </div>
+                )}
+
+                <div className="absolute left-4 top-4">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-green-700 shadow-sm">
+                    <Tag size={13} />
+                    {event.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Event Content */}
+              <div className="flex flex-1 flex-col p-6">
+
+                <h3 className="line-clamp-2 text-xl font-bold text-gray-900 transition group-hover:text-green-700">
+                  {event.title}
+                </h3>
+
+                {/* Event Information */}
+                <div className="mt-5 space-y-3">
+
+                  <div className="flex items-start gap-3 text-sm text-gray-500">
+                    <MapPin
+                      size={18}
+                      className="mt-0.5 shrink-0 text-green-600"
+                    />
+                    <span>{event.location}</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <Users
+                      size={18}
+                      className="shrink-0 text-green-600"
+                    />
+                    <span>
+                      {event.participants} Participants Joined
+                    </span>
+                  </div>
+
+                  {event.date && (
+                    <div className="flex items-center gap-3 text-sm text-gray-500">
+                      <CalendarDays
+                        size={18}
+                        className="shrink-0 text-green-600"
+                      />
+                      <span>
+                        {new Date(event.date).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
+                      </span>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* Details Button */}
+                <div className="mt-auto pt-6">
+                  <Link
+                    href={`/events/${event._id}`}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700"
+                  >
+                    View Details
+                    <ArrowRight
+                      size={17}
+                      className="transition group-hover:translate-x-1"
+                    />
+                  </Link>
+                </div>
+
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Total Events */}
+        <p className="mt-8 text-center text-sm text-gray-500">
+          Showing {events.length} events
+        </p>
+
+      </div>
+    </section>
+  );
 };
 
 export default EventsCard;

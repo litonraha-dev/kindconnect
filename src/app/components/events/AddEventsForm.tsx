@@ -1,59 +1,78 @@
-
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 
 const AddEventsForm = () => {
-    const today = new Date().toISOString().split("T")[0];
-    const currentTime = new Date().toTimeString().slice(0, 5);
-
+  // ১. স্টেট এবং আজকের তারিখ ও সময় ইনিশিয়ালাইজ করা
+  const [today, setToday] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     location: "",
-    date: today,
-    time: currentTime,
+    date: "",
+    time: "",
     description: "",
     image: "",
     participants: 1,
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
+  // ২. কম্পোনেন্ট মাউন্ট হওয়ার পর ক্লায়েন্টে ডেট ও টাইম সেট হবে
+  useEffect(() => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    const currentTime = new Date().toTimeString().slice(0, 5);
 
+    setToday(currentDate);
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "participants" ? Number(value) : value,
+      date: currentDate,
+      time: currentTime,
+    }));
+  }, []);
+
+  // ৩. ইনপুট পরিবর্তন হ্যান্ডেল করার জন্য ফাংশন
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
+  // ৪. ফর্ম সাবমিট হ্যান্ডেল করার জন্য ফাংশন
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-const res = await fetch('http://localhost:8000/create-events',{
-    method:"POST",
-    headers:{
-        "Content-Type":"application/json",
-    },
-    body:JSON.stringify(formData)
-}
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/create-events`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  )
-  const data = await res.json()
+      const data = await response.json();
 
-//   console.log(data);
-  };
+      if (response.ok) {
+        console.log("Event Created Successfully:", data);
+        alert("Event created successfully!");
+        // চাইলে এখানে ফর্ম রিসেট বা অন্য পেজে রিডাইরেক্ট করতে পারেন
+      } else {
+        console.error("Failed to create event:", data);
+        alert(data.message || "Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Server error. Please try again later.");
+    }
+  }; // অতিরিক্ত ব্র্যাকেটটি এখানে সঠিকভাবে বন্ধ করা হয়েছে
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Create an Event
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900">Create an Event</h1>
         <p className="text-gray-500 mt-2">
           Bring people together and make a positive impact.
         </p>
@@ -82,9 +101,7 @@ const res = await fetch('http://localhost:8000/create-events',{
         {/* Category and Location */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Category *
-            </label>
+            <label className="block text-sm font-medium mb-2">Category *</label>
             <select
               name="category"
               value={formData.category}
@@ -102,9 +119,7 @@ const res = await fetch('http://localhost:8000/create-events',{
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Location *
-            </label>
+            <label className="block text-sm font-medium mb-2">Location *</label>
             <input
               type="text"
               name="location"
@@ -120,24 +135,20 @@ const res = await fetch('http://localhost:8000/create-events',{
         {/* Date and Time */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Event Date *
-            </label>
+            <label className="block text-sm font-medium mb-2">Event Date *</label>
             <input
               type="date"
               name="date"
               value={formData.date}
               onChange={handleChange}
-                min={today}
+              min={today}
               required
               className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:border-green-600"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Event Time *
-            </label>
+            <label className="block text-sm font-medium mb-2">Event Time *</label>
             <input
               type="time"
               name="time"
