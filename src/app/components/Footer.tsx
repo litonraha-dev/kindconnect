@@ -33,7 +33,7 @@ const Footer = () => {
 
         {/* কপিরাইট সেকশন */}
         <div className="text-sm text-gray-500 text-center md:text-right">
-          <p>© {new Date().getFullYear()} KindConnect. All rights reserved.</p>
+          <p>© 2026 KindConnect. All rights reserved.</p>
         </div>
 
       </div>

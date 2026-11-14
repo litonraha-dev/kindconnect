@@ -12,6 +12,7 @@ import {
   Calendar,
   LogOut,
 } from "lucide-react";
+import Image from "next/image";
 
 const SessionPage = () => {
   const router = useRouter();
@@ -89,11 +90,13 @@ const SessionPage = () => {
           <div className="flex flex-col items-center gap-4 border-b pb-6 sm:flex-row">
 
             {user.image ? (
-              <img
-                src={user.image}
-                alt={user.name}
-                className="h-20 w-20 rounded-full object-cover"
-              />
+              <Image
+  src={user.image || "/default-avatar.png"}
+  alt={user.name || "User profile"}
+  width={80}
+  height={80}
+  className="h-20 w-20 rounded-full object-cover"
+/>
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
                 <User className="h-10 w-10 text-emerald-600" />

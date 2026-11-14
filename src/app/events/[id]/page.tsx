@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import EditEvent from "@/app/components/events/EditEvent";
 import DeleteEvent from "@/app/components/events/DeleteEvent";
+import Link from "next/link";
 
 export const instant = false;
 
@@ -109,9 +110,9 @@ export default async function EventDetailsPage({ params }: PageProps) {
 
           {/* Action Button */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <button className="flex-1 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 transition">
+            <Link href={'/join-event'} className="flex-1 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 transition">
               Join Event
-            </button>
+            </Link>
 
             <button className="flex-1 rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50 transition">
               Share Event

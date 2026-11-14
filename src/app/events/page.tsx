@@ -42,9 +42,6 @@ function EventsSkeleton() {
 }
 
 
-    // return (
-        
-    // );
 export default function MyEventsPage(){
     return(
         <Suspense fallback={<EventsSkeleton/>}>
