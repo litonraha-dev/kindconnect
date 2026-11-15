@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { CalendarDays, MapPin, Pencil, Trash2, Users, ArrowUpRight } from "lucide-react";
+import { toast } from "sonner";
 
 interface JoinedEvent {
   _id: string;
@@ -16,6 +17,8 @@ interface JoinedEvent {
   address: string;
   message?: string;
   status: string;
+  location?: string;
+  date?: string;
 }
 
 const MyEventsPage = () => {
@@ -53,6 +56,30 @@ const MyEventsPage = () => {
 
     fetchMyEvents();
   }, [session?.user?.id, isPending]);
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this registration?"
+    );
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/join-event/${id}`,
+        { method: "DELETE" }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to delete registration");
+      }
+
+      setEvents((prev) => prev.filter((event) => event._id !== id));
+      toast.success("Registration deleted");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete registration");
+    }
+  };
 
   if (isPending || loading) {
     return <p className="text-center py-20">Loading...</p>;
