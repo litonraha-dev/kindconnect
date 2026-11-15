@@ -4,6 +4,7 @@ import { CalendarDays, Clock, MapPin, Users } from "lucide-react";
 import EditEvent from "@/app/components/events/EditEvent";
 import DeleteEvent from "@/app/components/events/DeleteEvent";
 import Link from "next/link";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 export const instant = false;
 
@@ -14,12 +15,17 @@ interface PageProps {
 }
 
 export default async function EventDetailsPage({ params }: PageProps) {
+
+  const token = await getTokenFromServer()
   const { id } = await params;
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/events/${id}`,
     {
       cache: "no-store",
+      headers:{
+       Authorization: `Bearer ${token}`
+      }
     },
   );
 

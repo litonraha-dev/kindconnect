@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -43,12 +42,14 @@ const SignIn = () => {
         toast.error(error.message || "Invalid email or password");
         return;
       }
-
+      setFormData({
+        email: "",
+        password: "",
+      });
       toast.success("Signed in successfully!");
 
       router.push("/");
       router.refresh();
-
     } catch (error) {
       console.error("Sign in error:", error);
       toast.error("Something went wrong!");
@@ -59,29 +60,22 @@ const SignIn = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-
       <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-6 shadow-xl sm:p-8">
-
         {/* Logo */}
         <div className="mb-8 text-center">
-
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100">
             <Heart className="h-7 w-7 fill-emerald-600 text-emerald-600" />
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900">
-            Welcome Back!
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome Back!</h1>
 
           <p className="mt-2 text-sm text-gray-500">
             Sign in to continue your KindConnect journey.
           </p>
-
         </div>
 
         {/* Sign In Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-
           {/* Email */}
           <div>
             <label
@@ -100,6 +94,7 @@ const SignIn = () => {
                 type="email"
                 placeholder="example@email.com"
                 value={formData.email}
+                autoComplete="email"
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                 required
@@ -125,6 +120,7 @@ const SignIn = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={formData.password}
+                autoComplete="current-password"
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-200 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                 required
@@ -140,7 +136,6 @@ const SignIn = () => {
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
-
         </form>
 
         {/* Signup Link */}
@@ -153,7 +148,6 @@ const SignIn = () => {
             Create Account
           </Link>
         </p>
-
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 
+import { getTokenFromServer } from '@/lib/getTokenFromServer';
 import EventsCard from '../components/events/EventsCard';
 import { Suspense } from 'react';
 
@@ -6,8 +7,12 @@ import { Suspense } from 'react';
 
 
  async function Events(){
+  const token = await getTokenFromServer()
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events`,{
-        cache:"no-store"
+        cache:"no-store",
+        headers:{
+         Authorization: `Bearer ${token}`
+        }
     });
 if(!res.ok){
     throw new Error("Failed to fetch events");

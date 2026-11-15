@@ -2,11 +2,15 @@
 import Link from 'next/link';
 import React, { Suspense } from 'react';
 import EventsCard from './events/EventsCard';
+import { getTokenFromServer } from '@/lib/getTokenFromServer';
 
 export const FindEvent = async() => {
-
+const token = await getTokenFromServer()
 const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events`,{
-        cache:"no-store"
+        cache:"no-store",
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
     });
 if(!res.ok){
     throw new Error("Failed to fetch events");

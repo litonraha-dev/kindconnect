@@ -1,5 +1,6 @@
 "use client";
 
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 
 const AddEventsForm = () => {
@@ -43,12 +44,16 @@ const AddEventsForm = () => {
   // ৪. ফর্ম সাবমিট হ্যান্ডেল করার জন্য ফাংশন
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const token= await getTokenFromClient()
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/create-events`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+
+          
         },
         body: JSON.stringify(formData),
       });
